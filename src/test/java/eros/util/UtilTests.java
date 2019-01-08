@@ -1,28 +1,77 @@
 package eros.util;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-@DisplayName("Testing the Util class...")
+import eros.data.Coin;
+
+@DisplayName("Testing the Util...")
 public class UtilTests {
 
-	@Test
 	@DisplayName("Testing the partition method...")
-	public void partitionTest() {
+	@ParameterizedTest(name = "{index} => {arguments}")
+	@ValueSource(ints = { -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
+	public <T> void partition_Empty_List(int numberOfPartitions) {
 
-		List<List<Object>> partition = Util.partition(Collections.emptyList(),
-			5);
+		List<List<T>> partition = Util.partition(Collections.emptyList(),
+			numberOfPartitions);
 
-		assertTrue(!partition.isEmpty(), "partition is not empty.");
-		assertTrue(partition.size() == 5, "size should be 5.");
-		IntStream.rangeClosed(0, 4).forEach(
-			x -> assertTrue(partition.get(x).isEmpty(), "Size should be 0"));
+		assertTrue(
+			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
+			"partition is not empty.");
+
+		assertTrue(
+			numberOfPartitions <= 0 ? partition.size() == 0
+				: partition.size() == numberOfPartitions,
+			"size should be: " + numberOfPartitions);
+
+		IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
+			x -> assertTrue(partition.get(x).isEmpty(), "Size should be 0."));
+
+	}
+
+	@DisplayName("Testing the partition method with a list with 3 elements...")
+	@ParameterizedTest(name = "{index} => {arguments}")
+	@MethodSource("intAndListProvider")
+	public <T> void partitionTestListWith(List<T> list,
+		int numberOfPartitions) {
+
+		List<List<T>> partition = Util.partition(list, numberOfPartitions);
+
+		assertTrue(
+			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
+			"partition is not empty.");
+
+		assertTrue(
+			numberOfPartitions <= 0 ? partition.size() == 0
+				: partition.size() == 3,
+			"size should be: " + numberOfPartitions);
+
+		IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
+			x -> assertTrue(partition.get(x).size() == 1, "Size should be 1."));
+
+	}
+
+	static Stream<Arguments> intAndListProvider() {
+		return Stream.of(arguments(Arrays.asList("a", "b", "c"), 3),
+
+			arguments(Arrays.asList("x", "y", "z"), 3),
+
+			arguments(
+				Arrays.asList(new Coin(2.0d), new Coin(2.0d), new Coin(3.0d)),
+				3));
 	}
 
 }

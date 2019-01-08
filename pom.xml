@@ -10,7 +10,7 @@
 	<profiles>
 
 		<profile>
-			<id>compiler</id>
+			<id>install</id>
 
 			<repositories>
 
@@ -33,7 +33,6 @@
 							<source>11</source>
 							<target>11</target>
 							<release>11</release>
-							<!-- release>1.11</release> -->
 						</configuration>
 					</plugin>
 
@@ -51,30 +50,7 @@
 			</properties>
 
 			<dependencies>
-				<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
-				<dependency>
-					<groupId>org.apache.poi</groupId>
-					<artifactId>poi-ooxml</artifactId>
-					<version>4.0.1</version>
-				</dependency>
 
-				<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-				<dependency>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-					<version>27.0.1-jre</version>
-				</dependency>
-
-				<!-- https://mvnrepository.com/artifact/io.vavr/vavr -->
-				<dependency>
-					<groupId>io.vavr</groupId>
-					<artifactId>vavr</artifactId>
-					<version>0.9.2</version>
-				</dependency>
-
-				<!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine 
-					<dependency> <groupId>org.junit.vintage</groupId> <artifactId>junit-vintage-engine</artifactId> 
-					<version>5.2.0</version> <scope>test</scope> </dependency> -->
 
 				<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
 				<dependency>
@@ -103,6 +79,20 @@
 					<groupId>com.googlecode.totallylazy</groupId>
 					<artifactId>totallylazy</artifactId>
 					<version>1193</version>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<version>27.0.1-jre</version>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/io.vavr/vavr -->
+				<dependency>
+					<groupId>io.vavr</groupId>
+					<artifactId>vavr</artifactId>
+					<version>0.9.2</version>
 				</dependency>
 
 			</dependencies>
