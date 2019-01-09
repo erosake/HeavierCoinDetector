@@ -24,7 +24,7 @@ public class Coin implements Weightable {
 	@Override
 	public String toString() {
 
-		return String.format("Coin [weight=%.2fg hashCode=%h]", weight, hashCode());
+		return String.format("Coin [weight=%.2fg]", weight);
 
 	}
 

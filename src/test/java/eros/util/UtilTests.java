@@ -2,14 +2,13 @@ package eros.util;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static utilities.Utils.generateListOfRandomElementsWithSize;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.IntFunction;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -69,8 +68,9 @@ public class UtilTests {
 	}
 
 	static Stream<Arguments> intAndListProvider() {
-		return Stream.of(arguments(
-			generateListOfRandomElementsWithSize(x -> UUID.randomUUID(), 3), 3),
+		return Stream.of(
+			arguments(generateListOfRandomElementsWithSize(
+				x -> UUID.randomUUID(), 3), 3),
 
 			arguments(generateListOfRandomElementsWithSize(
 				x -> generateIntegerBetween1And100(), 3), 3),
@@ -79,21 +79,14 @@ public class UtilTests {
 				Arrays.asList(new Coin(2.0d), new Coin(2.0d), new Coin(3.0d)),
 				3),
 
-			arguments(generateListOfRandomElementsWithSize(Random::new, 3), 3));
+			arguments(
+				generateListOfRandomElementsWithSize(Random::new, 3), 3));
 
 	}
 
 	private static Integer generateIntegerBetween1And100() {
 		Random random = new Random();
 		return random.nextInt(100) + 1;
-	}
-
-	static <T> List<T> generateListOfRandomElementsWithSize(
-		IntFunction<T> mapper, int size) {
-
-		return IntStream.range(0, size).mapToObj(mapper)
-			.collect(Collectors.toList());
-
 	}
 
 }
