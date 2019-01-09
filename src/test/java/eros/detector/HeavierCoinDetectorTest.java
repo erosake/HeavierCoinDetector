@@ -26,7 +26,7 @@ public class HeavierCoinDetectorTest {
 	public void test(Tuple2<Coin, List<Weightable>> tuplu) {
 
 		var heavierCoin = tuplu._1();
-		List<Weightable> coins = tuplu._2();
+		var coins = tuplu._2();
 
 		var detectedCoin = new HeavierCoinDetector<Weightable>().detect(coins)
 			.get().orElse(Coin.NONE);

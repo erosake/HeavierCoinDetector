@@ -21,7 +21,7 @@ public class Util {
 		while (!stack.isEmpty()) {
 
 			collect.get(i % numberOfPartitions).add(stack.pop());
-			i++;
+			++i;
 
 		}
 

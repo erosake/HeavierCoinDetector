@@ -28,20 +28,21 @@ public class UtilTests {
 	@ValueSource(ints = { -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
 	public <T> void partition_Empty_List(int numberOfPartitions) {
 
-		List<List<T>> partition = Util.partition(Collections.emptyList(),
+		var partition = Util.partition(Collections.emptyList(),
 			numberOfPartitions);
 
 		assertTrue(
 			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
-			"partition is not empty.");
+			() -> "Partition is not empty.");
 
 		assertTrue(
 			numberOfPartitions <= 0 ? partition.size() == 0
 				: partition.size() == numberOfPartitions,
-			"size should be: " + numberOfPartitions);
+			() -> String.format("Size should be: %s.", numberOfPartitions));
 
-		IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
-			x -> assertTrue(partition.get(x).isEmpty(), "Size should be 0."));
+		IntStream.rangeClosed(0, numberOfPartitions - 1)
+			.forEach(x -> assertTrue(partition.get(x).isEmpty(),
+				() -> "Size should be 0."));
 
 	}
 
@@ -51,16 +52,16 @@ public class UtilTests {
 	public <T> void partitionTestListWith3Elements(List<T> list,
 		int numberOfPartitions) {
 
-		List<List<T>> partition = Util.partition(list, numberOfPartitions);
+		var partition = Util.partition(list, numberOfPartitions);
 
 		assertTrue(
 			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
-			"partition is not empty.");
+			() -> "Partition is not empty.");
 
 		assertTrue(
 			numberOfPartitions <= 0 ? partition.size() == 0
 				: partition.size() == 3,
-			"size should be: " + numberOfPartitions);
+			String.format("Size should be: %s.", numberOfPartitions));
 
 		IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
 			x -> assertTrue(partition.get(x).size() == 1, "Size should be 1."));
@@ -68,9 +69,9 @@ public class UtilTests {
 	}
 
 	static Stream<Arguments> intAndListProvider() {
-		return Stream.of(
-			arguments(generateListOfRandomElementsWithSize(
-				x -> UUID.randomUUID(), 3), 3),
+
+		return Stream.of(arguments(
+			generateListOfRandomElementsWithSize(x -> UUID.randomUUID(), 3), 3),
 
 			arguments(generateListOfRandomElementsWithSize(
 				x -> generateIntegerBetween1And100(), 3), 3),
@@ -79,14 +80,15 @@ public class UtilTests {
 				Arrays.asList(new Coin(2.0d), new Coin(2.0d), new Coin(3.0d)),
 				3),
 
-			arguments(
-				generateListOfRandomElementsWithSize(Random::new, 3), 3));
+			arguments(generateListOfRandomElementsWithSize(Random::new, 3), 3));
 
 	}
 
 	private static Integer generateIntegerBetween1And100() {
-		Random random = new Random();
+
+		var random = new Random();
 		return random.nextInt(100) + 1;
+
 	}
 
 }

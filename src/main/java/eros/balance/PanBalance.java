@@ -31,7 +31,7 @@ public class PanBalance<T extends Weightable> {
 
 	public Response whichPaneIsHeavier() {
 
-		double difference = leftPan.getWeight() - rightPan.getWeight();
+		var difference = leftPan.getWeight() - rightPan.getWeight();
 		if (difference == 0.0d) {
 
 			return Response.EQUAL;

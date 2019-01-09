@@ -22,9 +22,9 @@ public class Utils {
 	public static Tuple2<Coin, List<Coin>> generateCoinsWithOneFakeCoinAmongThem(
 		int totalNumberOfCoins, double weightOfOneCoin) {
 
-		List<Coin> result = generateNumberOfIdenticalCoins(totalNumberOfCoins,
+		var result = generateNumberOfIdenticalCoins(totalNumberOfCoins,
 			weightOfOneCoin);
-		Coin heavierCoin = new Coin(weightOfOneCoin + 1.0d);
+		var heavierCoin = new Coin(weightOfOneCoin + 1.0d);
 		result.add(heavierCoin);
 
 		Collections.shuffle(result);
@@ -36,8 +36,8 @@ public class Utils {
 	public static List<Coin> generateNumberOfIdenticalCoins(
 		int numberOfIdenticalCoins, double weightOfOneCoin) {
 
-		IntFunction<? extends Coin> mapper = x -> new Coin(weightOfOneCoin);
-		return IntStream.range(0, numberOfIdenticalCoins).mapToObj(mapper)
+		IntFunction<? extends Coin> toCoin = x -> new Coin(weightOfOneCoin);
+		return IntStream.range(0, numberOfIdenticalCoins).mapToObj(toCoin)
 			.collect(Collectors.toList());
 
 	}

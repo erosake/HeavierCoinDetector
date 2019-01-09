@@ -15,15 +15,17 @@ public class Pan<T extends Weightable> {
 		items.add(item);
 
 	}
-	
-	
 
 	public List<T> getItems() {
+
 		return Collections.unmodifiableList(items);
+
 	}
 
 	public Double getWeight() {
-		return items.stream().map(x -> x.retrieveWeight()).reduce(0.0d, Double::sum);
+
+		return items.stream().map(T::retrieveWeight).reduce(0.0d, Double::sum);
+
 	}
 
 }

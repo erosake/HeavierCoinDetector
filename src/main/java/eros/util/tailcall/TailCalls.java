@@ -1,11 +1,13 @@
 package eros.util.tailcall;
 
-import eros.util.tailcall.TailCall;
+import eros.util.tailcall.interfaces.TailCall;
 
 public class TailCalls {
 
 	public static <T> TailCall<T> call(final TailCall<T> nextCall) {
+
 		return nextCall;
+
 	}
 
 	public static <T> TailCall<T> done(final T value) {
