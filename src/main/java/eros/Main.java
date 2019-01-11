@@ -1,7 +1,6 @@
 package eros;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -18,7 +17,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Main coinTester = new Main();
+		var coinTester = new Main();
 		Runnable consumer = () -> coinTester.extracted();
 
 		test(consumer);
@@ -27,7 +26,7 @@ public class Main {
 
 	private static void test(Runnable runnable) {
 
-		Stopwatch createStarted = Stopwatch.createStarted();
+		var createStarted = Stopwatch.createStarted();
 
 		runnable.run();
 
@@ -36,11 +35,11 @@ public class Main {
 	}
 
 	public void extracted() {
-		List<CompletableFuture<Optional<Coin>>> list = IntStream
-			.rangeClosed(0, 10000).mapToObj(x -> detectHeavierCoinInTheGroup(x))
+		var list = IntStream.rangeClosed(0, 10000)
+			.mapToObj(x -> detectHeavierCoinInTheGroup(x))
 			.collect(Collectors.toList());
 
-		CompletableFuture<Void> allOf = CompletableFuture
+		var allOf = CompletableFuture
 			.allOf(list.toArray(new CompletableFuture[list.size()]));
 		allOf.join();
 
@@ -58,8 +57,8 @@ public class Main {
 
 		return CompletableFuture.supplyAsync(() -> {
 
-			List<Coin> coins = new CoinGenerator().generate(x);
-			HeavierCoinDetector<Coin> heavierCoinDetector = new HeavierCoinDetector<Coin>();
+			var coins = new CoinGenerator().generate(x);
+			var heavierCoinDetector = new HeavierCoinDetector<Coin>();
 			Collections.shuffle(coins);
 			// System.out.println(coins);
 
