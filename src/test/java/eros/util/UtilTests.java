@@ -1,94 +1,89 @@
 package eros.util;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static utilities.Utils.generateListOfRandomElementsWithSize;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
+import eros.data.Coin;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import eros.data.Coin;
+import java.util.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static utilities.Utils.generateListOfRandomElementsWithSize;
+
+@SuppressWarnings("ExcessiveLambdaUsage")
 @DisplayName("Testing the Util...")
-public class UtilTests {
+class UtilTests {
 
-	@DisplayName("Testing the partition method...")
-	@ParameterizedTest(name = "{index} => {arguments}")
-	@ValueSource(ints = { -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })
-	public <T> void partition_Empty_List(int numberOfPartitions) {
+    static Stream<Arguments> intAndListProvider() {
 
-		var partition = Util.partition(Collections.emptyList(),
-			numberOfPartitions);
+        return Stream.of(arguments(
+                generateListOfRandomElementsWithSize(x -> UUID.randomUUID(), 3), 3),
 
-		assertTrue(
-			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
-			() -> "Partition is not empty.");
+                arguments(generateListOfRandomElementsWithSize(
+                        x -> generateIntegerBetween1And100(), 3), 3),
 
-		assertTrue(
-			numberOfPartitions <= 0 ? partition.size() == 0
-				: partition.size() == numberOfPartitions,
-			() -> String.format("Size should be: %s.", numberOfPartitions));
+                arguments(
+                        Arrays.asList(new Coin(2.0d), new Coin(2.0d), new Coin(3.0d)),
+                        3),
 
-		IntStream.rangeClosed(0, numberOfPartitions - 1)
-			.forEach(x -> assertTrue(partition.get(x).isEmpty(),
-				() -> "Size should be 0."));
+                arguments(generateListOfRandomElementsWithSize(Random::new, 3), 3));
 
-	}
+    }
 
-	@DisplayName("Testing the partition method with a list with 3 elements...")
-	@ParameterizedTest(name = "{index} => {arguments}")
-	@MethodSource("intAndListProvider")
-	public <T> void partitionTestListWith3Elements(List<T> list,
-		int numberOfPartitions) {
+    private static Integer generateIntegerBetween1And100() {
 
-		var partition = Util.partition(list, numberOfPartitions);
+        var random = new Random();
+        return random.nextInt(100) + 1;
 
-		assertTrue(
-			numberOfPartitions > 0 ? !partition.isEmpty() : partition.isEmpty(),
-			() -> "Partition is not empty.");
+    }
 
-		assertTrue(
-			numberOfPartitions <= 0 ? partition.size() == 0
-				: partition.size() == 3,
-			String.format("Size should be: %s.", numberOfPartitions));
+    @DisplayName("Testing the partition method...")
+    @ParameterizedTest(name = "{index} => {arguments}")
+    @ValueSource(ints = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    <T> void partition_Empty_List(int numberOfPartitions) {
 
-		IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
-			x -> assertTrue(partition.get(x).size() == 1, "Size should be 1."));
+        var partition = Util.partition(Collections.emptyList(),
+                numberOfPartitions);
 
-	}
+        assertTrue(
+                (numberOfPartitions > 0) != partition.isEmpty(),
+                () -> "Partition is not empty.");
 
-	static Stream<Arguments> intAndListProvider() {
+        assertTrue(
+                numberOfPartitions <= 0 || partition.size() == numberOfPartitions,
+                () -> String.format("Size should be: %s.", numberOfPartitions));
 
-		return Stream.of(arguments(
-			generateListOfRandomElementsWithSize(x -> UUID.randomUUID(), 3), 3),
+        IntStream.rangeClosed(0, numberOfPartitions - 1)
+                .forEach(x -> assertTrue(partition.get(x).isEmpty(),
+                        () -> "Size should be 0."));
 
-			arguments(generateListOfRandomElementsWithSize(
-				x -> generateIntegerBetween1And100(), 3), 3),
+    }
 
-			arguments(
-				Arrays.asList(new Coin(2.0d), new Coin(2.0d), new Coin(3.0d)),
-				3),
+    @DisplayName("Testing the partition method with a list with 3 elements...")
+    @ParameterizedTest(name = "{index} => {arguments}")
+    @MethodSource("intAndListProvider")
+    <T> void partitionTestListWith3Elements(List<T> list,
+                                            int numberOfPartitions) {
 
-			arguments(generateListOfRandomElementsWithSize(Random::new, 3), 3));
+        var partition = Util.partition(list, numberOfPartitions);
 
-	}
+        assertTrue(
+                (numberOfPartitions > 0) != partition.isEmpty(),
+                () -> "Partition is not empty.");
 
-	private static Integer generateIntegerBetween1And100() {
+        assertTrue(
+                numberOfPartitions <= 0 || partition.size() == 3,
+                String.format("Size should be: %s.", numberOfPartitions));
 
-		var random = new Random();
-		return random.nextInt(100) + 1;
+        IntStream.rangeClosed(0, numberOfPartitions - 1).forEach(
+                x -> assertEquals(1, partition.get(x).size(), "Size should be 1."));
 
-	}
+    }
 
 }

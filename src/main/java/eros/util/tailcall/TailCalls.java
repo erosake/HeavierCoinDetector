@@ -4,39 +4,33 @@ import eros.util.tailcall.interfaces.TailCall;
 
 public class TailCalls {
 
-	public static <T> TailCall<T> call(final TailCall<T> nextCall) {
+    public static <T> TailCall<T> done(final T value) {
 
-		return nextCall;
+        return new TailCall<>() {
 
-	}
+            @Override
+            public boolean isComplete() {
 
-	public static <T> TailCall<T> done(final T value) {
+                return true;
 
-		return new TailCall<T>() {
+            }
 
-			@Override
-			public boolean isComplete() {
+            @Override
+            public T result() {
 
-				return true;
+                return value;
 
-			}
+            }
 
-			@Override
-			public T result() {
+            @Override
+            public TailCall<T> apply() {
 
-				return value;
+                throw new Error("not implemented");
 
-			}
+            }
 
-			@Override
-			public TailCall<T> apply() {
+        };
 
-				throw new Error("not implemented");
-
-			}
-
-		};
-
-	}
+    }
 
 }

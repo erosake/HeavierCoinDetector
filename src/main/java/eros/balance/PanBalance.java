@@ -4,41 +4,41 @@ import eros.data.interfaces.Weightable;
 
 public class PanBalance<T extends Weightable> {
 
-	public static enum Response {
+    private final Pan<T> leftPan = new Pan<>();
+    private final Pan<T> rightPan = new Pan<>();
 
-		EQUAL {
+    public void addItemToLeftPan(T x) {
+        leftPan.add(x);
+    }
 
-		},
-		RIGTH {
+    public void addItemToRightPan(T item) {
+        rightPan.add(item);
+    }
 
-		},
-		LEFT {
+    public Response whichPaneIsHeavier() {
 
-		};
+        var difference = leftPan.getWeight() - rightPan.getWeight();
+        if (difference == 0.0d) {
 
-	}
+            return Response.EQUAL;
+        }
 
-	private Pan<T> leftPan = new Pan<>();
-	private Pan<T> rightPan = new Pan<>();
+        return difference > 0.0d ? Response.LEFT : Response.RIGTH;
 
-	public void addItemToLeftPan(T x) {
-		leftPan.add(x);
-	}
+    }
 
-	public void addItemToRightPan(T item) {
-		rightPan.add(item);
-	}
+    public enum Response {
 
-	public Response whichPaneIsHeavier() {
+        EQUAL {
 
-		var difference = leftPan.getWeight() - rightPan.getWeight();
-		if (difference == 0.0d) {
+        },
+        RIGTH {
 
-			return Response.EQUAL;
-		}
+        },
+        LEFT {
 
-		return difference > 0.0d ? Response.LEFT : Response.RIGTH;
+        }
 
-	}
+    }
 
 }

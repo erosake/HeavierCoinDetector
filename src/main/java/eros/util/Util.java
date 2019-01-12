@@ -8,25 +8,25 @@ import java.util.stream.IntStream;
 
 public class Util {
 
-	public static <T> List<List<T>> partition(List<T> list,
-		int numberOfPartitions) {
+    public static <T> List<List<T>> partition(List<T> list,
+                                              int numberOfPartitions) {
 
-		List<List<T>> collect = IntStream.range(0, numberOfPartitions)
-			.mapToObj(x -> new ArrayList<T>()).collect(Collectors.toList());
+        List<List<T>> collect = IntStream.range(0, numberOfPartitions)
+                .mapToObj(x -> new ArrayList<T>()).collect(Collectors.toList());
 
-		Stack<T> stack = new Stack<>();
-		stack.addAll(list);
+        Stack<T> stack = new Stack<>();
+        stack.addAll(list);
 
-		int i = 0;
-		while (!stack.isEmpty()) {
+        int i = 0;
+        while (!stack.isEmpty()) {
 
-			collect.get(i % numberOfPartitions).add(stack.pop());
-			++i;
+            collect.get(i % numberOfPartitions).add(stack.pop());
+            ++i;
 
-		}
+        }
 
-		return collect;
+        return collect;
 
-	}
+    }
 
 }

@@ -1,72 +1,73 @@
 package eros.detector;
 
-import java.util.List;
-import java.util.Optional;
-
 import eros.balance.PanBalance;
 import eros.data.interfaces.Weightable;
 import eros.util.Util;
 import eros.util.tailcall.TailCalls;
 import eros.util.tailcall.interfaces.TailCall;
 
+import java.util.List;
+import java.util.Optional;
+
+@SuppressWarnings("LoopStatementThatDoesntLoop")
 public class HeavierCoinDetector<T extends Weightable> {
 
-	private static final int NUMBER_OF_PARTITIONS = 3;
+    private static final int NUMBER_OF_PARTITIONS = 3;
 
-	public TailCall<Optional<T>> detect(List<T> things) {
+    public TailCall<Optional<T>> detect(List<T> things) {
 
-		var size = things.size();
-		while (size > 1) {
+        var size = things.size();
+        while (size > 1) {
 
-			var panBalance = new PanBalance<T>();
+            var panBalance = new PanBalance<T>();
 
-			var partitions = Util.partition(things, NUMBER_OF_PARTITIONS);
+            var partitions = Util.partition(things, NUMBER_OF_PARTITIONS);
 
-			var firstPartitionIndex = 0;
-			var secondPartitionIndex = 1;
-			var thirdPartitionIndex = 2;
+            var firstPartitionIndex = 0;
+            var secondPartitionIndex = 1;
+            var thirdPartitionIndex = 2;
 
-			if (size % NUMBER_OF_PARTITIONS == 1) {
+            if (size % NUMBER_OF_PARTITIONS == 1) {
 
-				firstPartitionIndex = 1;
-				secondPartitionIndex = 2;
-				thirdPartitionIndex = 0;
+                firstPartitionIndex = 1;
+                secondPartitionIndex = 2;
+                thirdPartitionIndex = 0;
 
-			}
+            }
 
-			var firstPartition = partitions.get(firstPartitionIndex);
-			var secondPartition = partitions.get(secondPartitionIndex);
-			var thirdPartition = partitions.get(thirdPartitionIndex);
+            var firstPartition = partitions.get(firstPartitionIndex);
+            var secondPartition = partitions.get(secondPartitionIndex);
+            var thirdPartition = partitions.get(thirdPartitionIndex);
 
-			firstPartition.forEach(x -> panBalance.addItemToLeftPan(x));
-			secondPartition.forEach(x -> panBalance.addItemToRightPan(x));
+            firstPartition.forEach(panBalance::addItemToLeftPan);
+            secondPartition.forEach(panBalance::addItemToRightPan);
 
-			var whichPaneIsHeavier = panBalance.whichPaneIsHeavier();
-			switch (whichPaneIsHeavier) {
-			case LEFT:
+            var whichPaneIsHeavier = panBalance.whichPaneIsHeavier();
+            switch (whichPaneIsHeavier) {
+                case LEFT:
 
-				return () -> detect(firstPartition);
+                    return () -> detect(firstPartition);
 
-			case RIGTH:
+                case RIGTH:
 
-				return () -> detect(secondPartition);
+                    return () -> detect(secondPartition);
 
-			case EQUAL:
+                case EQUAL:
 
-				return () -> detect(thirdPartition);
+                    return () -> detect(thirdPartition);
 
-			}
+            }
 
-		}
+        }
 
-		if (things.isEmpty()) {
+        if (things.isEmpty()) {
 
-			return TailCalls.done(Optional.empty());
+            return TailCalls.done(Optional.empty());
 
-		}
+        }
 
-		return TailCalls.done(Optional.ofNullable(things.get(0)));
+        return TailCalls.done(Optional.ofNullable(things.get(0)));
 
-	}
+    }
 
 }
