@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 public class CoinGenerator {
 
-    public List<Coin> generate(int totalNumberOfCoins) {
+    public List<Coin> generateCoinsWithOneHeavierCoinAmongThem(int totalNumberOfCoins) {
 
         if (totalNumberOfCoins < 0) {
 
@@ -25,16 +25,34 @@ public class CoinGenerator {
 
         }
 
-        var random = new Random();
-        var weight = random.nextInt(100) * random.nextDouble() + 1;
+        var weight = generateRandomWeight();
 
-        IntFunction<Coin> mapper = x -> new Coin(weight);
-        var result = IntStream.rangeClosed(1, totalNumberOfCoins - 1)
-                .mapToObj(mapper).collect(Collectors.toList());
+        var result = generateIdeticalCoinsWithWeight(totalNumberOfCoins - 1, weight);
 
-        result.add(new Coin(weight + random.nextDouble()));
+        final double addedWeight = new Random().nextDouble();
+        result.add(new Coin(weight + addedWeight));
 
         return result;
+
+    }
+
+    private List<Coin> generateIdeticalCoinsWithWeight(int totalNumberOfCoins, double weight) {
+
+        IntFunction<Coin> mapper = x -> new Coin(weight);
+
+        return IntStream.rangeClosed(1, totalNumberOfCoins)
+                .mapToObj(mapper).collect(Collectors.toList());
+
+
+    }
+
+    private double generateRandomWeight() {
+
+        var random = new Random();
+        final int randomInteger = random.nextInt(100);
+
+        return randomInteger * random.nextDouble() + 1;
+
     }
 
 }

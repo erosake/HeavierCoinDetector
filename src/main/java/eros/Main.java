@@ -46,7 +46,7 @@ class Main {
 
         return CompletableFuture.supplyAsync(() -> {
 
-            var coins = new CoinGenerator().generate(x);
+            var coins = new CoinGenerator().generateCoinsWithOneHeavierCoinAmongThem(x);
             var heavierCoinDetector = new HeavierCoinDetector<Coin>();
             Collections.shuffle(coins);
             // System.out.println(coins);
